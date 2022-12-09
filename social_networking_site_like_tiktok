@@ -1,0 +1,121 @@
+Social Networking Database design like Tiktok
+Abbrevations Used
+PR -> Primary key,  FR -> Foreign Key
+
+Tables:-----------
+
+users:
+	user_id (BIG INT 11) (PK)
+	name (varchar 255)
+	username (varchar 100)
+	email (varchar 255)
+	email_verified_at (timestamp) (nullable)
+	password (varchar 255)
+	dob (DATETIME)
+	user_image (varchar 255) (DEFAULT: Any Random Avatar)
+	remember_token (varchar 255) 
+	status (TINY INT 1)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+	notification_enabled (TINY INT 1) (DEFAULT: 0)
+
+master_interests:
+	master_interest_id (INT 11) (PK)
+	name (varchar 255)
+	status (TINY INT 1)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+user_interests:
+	user_interest_id (BIG INT 11) (PK)
+	user_id (BIG INT 11) (FK)
+	name (varchar 255)
+	status (TINY INT 1)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+user_feeds:
+	user_feed_id (BIG INT 11) (PK)
+	user_id (BIG INT 11) (FK)
+	title (varchar 255)
+	description (text)
+	feed_url (text)
+	feed_type (TINY INT 1) (COMMENT: 0->user_feed, 1: community_feed)
+	community_id (FK) (DEFAULT: 0)
+	status (TINY INT 1)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+user_feed_interests:
+	user_feed_interest_id (PK)
+	user_feed_id (FK)
+	user_interest_id (FK)
+	interest_type (TINY INT 1) (COMMENTS: 0->master_interests, 1:user_interest )  (DEFAULT:0)
+	status (TINY INT 1)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+settings:
+	setting_id (BIG INT 11) (PK)
+	name (varchar 100)
+	value (text)
+	setting_type (ENUMS: PAGE, GENERAL) (DEFAULT: PAGE)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+user_relationship:
+	user_relationship_id (BIG INT 11) (PK)
+	user_first_id (FK)
+	user_second_id (FK)
+	relationship_type (TINY INT 2) (COMMENTS 0-> pending_friend_request_from_first, 1: pending_friend_request_from_second, 2:friends, 3:block_from_first, 4:block_from_second, 5:block_both ) 
+	created_at (BIG INT)
+	updated_at (BIG INT)
+
+notification_table:
+	notification_id (BIG INT 11) (PK)
+	user_id_who_send_notification (FK)
+	user_id_to_whom_notify (FK)
+	notification_type (TINY INT 3) (COMMENTS 0-> pending_friend_request_from_first, 1: pending_friend_request_from_second, 2:friends, 3:block_from_first, 4:block_from_second, 5:block_both, 6:like, 7:unlike etc...) 	
+	is_read (TINY INT 1) (COMMENTS:0->no , 1->Yes) (DEFAULT: 0)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+
+community:
+	community_id (BIG INT 11) (PK)
+	name
+	created_by_user_id (FK)
+	updated_by_user_id (FK)
+	deleted_by_user_id (FK)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+community_users:
+	community_user_id (BIG INT 11) (PK)
+	community_id (FK)
+	user_id (FK)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+comments:
+	comment_id (BIG INT 11) (PK)
+	user_id (FK)
+	user_feed_id (FK)
+	comment (text)
+	created_at (BIG INT)
+	updated_at (BIG INT)
+	deleted_at (BIG INT)
+
+likes:
+	like_id (BIG INT 11) (PK)
+	entity_id (TINY INT 1) (COMMENTS: 0->user_feed_id, 1:comments)
+	user_id (FK)
+	user_feed_id (FK)
+	comment_id (FK) (DEFAULT: 0)
